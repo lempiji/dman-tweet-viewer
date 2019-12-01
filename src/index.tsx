@@ -124,6 +124,8 @@ function Viewer({ url }: ViewerProps) {
                             }
                             setCount(newValue);
                         }}
+                        min={0}
+                        max={tweets ? tweets.length : 0}
                         aria-labelledby="input-slider"
                     />
                 </Grid>
