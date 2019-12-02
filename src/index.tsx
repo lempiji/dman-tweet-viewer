@@ -92,8 +92,8 @@ function Viewer({ url }: ViewerProps) {
     }, [url]);
 
     return <Grid container spacing={2} >
-        <Grid container item spacing={2} alignItems="center">
-            <Grid item xs={2}>
+        <Grid container item xs={12} spacing={2}>
+            <Grid item>
                 <Input
                     autoFocus
                     value={count}
@@ -114,7 +114,7 @@ function Viewer({ url }: ViewerProps) {
                     }}
                 />
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs>
                 <Slider
                     value={typeof count === 'number' ? count : 0}
                     onChange={(_event, newValue) => {
@@ -150,7 +150,7 @@ function App() {
     }, [setSource]);
 
     const currentSource = sources.find(t => t.key === source);
-    return <div style={{ overflow:"hidden" }}>
+    return <div style={{ overflow: "hidden" }}>
         <div>
             <FormControl>
                 <InputLabel id="year-select-label">Year</InputLabel>
