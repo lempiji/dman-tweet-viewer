@@ -13,7 +13,7 @@ import FormControl from "@material-ui/core/FormControl";
 
 interface Twttr {
     widgets: {
-        createTweet(id: string, container: HTMLElement, options: {}): Promise<HTMLElement>;
+        createTweet(id: string, container: HTMLElement, options: { width: number }): Promise<HTMLElement>;
     };
 }
 declare const twttr: Twttr;
@@ -26,7 +26,7 @@ function Tweet({ tweet }: TweetProps) {
     const containerRef = React.useRef<HTMLDivElement>();
 
     React.useEffect(() => {
-        const t = twttr.widgets.createTweet(tweet, containerRef.current, {});
+        const t = twttr.widgets.createTweet(tweet, containerRef.current, { width: Math.min(window.innerWidth - 20, 500) });
         return () => {
             t.then(e => {
                 if (e && e.parentNode) {
@@ -91,58 +91,56 @@ function Viewer({ url }: ViewerProps) {
         };
     }, [url]);
 
-    return <div>
-        <Grid container spacing={2} >
-            <Grid container item spacing={2} alignItems="center">
-                <Grid item>
-                    <Input
-                        autoFocus
-                        value={count}
-                        margin="dense"
-                        onChange={(event) => {
-                            setCount(parseInt(event.target.value));
-                        }}
-                        onBlur={(event) => {
-                            const current = parseInt(event.target.value);
-                            setCount(Math.min(Math.max(0, current), tweets.length - 1));
-                        }}
-                        inputProps={{
-                            step: 1,
-                            min: 0,
-                            max: tweets ? tweets.length : 0,
-                            type: 'number',
-                            'aria-labelledby': 'input-slider',
-                        }}
-                    />
-                </Grid>
-                <Grid item xs>
-                    <Slider
-                        value={typeof count === 'number' ? count : 0}
-                        onChange={(_event, newValue) => {
-                            if (Array.isArray(newValue)) {
-                                newValue = newValue[0];
-                            }
-                            setCount(newValue);
-                        }}
-                        min={0}
-                        max={tweets ? tweets.length : 0}
-                        aria-labelledby="input-slider"
-                    />
-                </Grid>
+    return <Grid container spacing={2} >
+        <Grid container item spacing={2} alignItems="center">
+            <Grid item xs={2}>
+                <Input
+                    autoFocus
+                    value={count}
+                    margin="dense"
+                    onChange={(event) => {
+                        setCount(parseInt(event.target.value));
+                    }}
+                    onBlur={(event) => {
+                        const current = parseInt(event.target.value);
+                        setCount(Math.min(Math.max(0, current), tweets.length - 1));
+                    }}
+                    inputProps={{
+                        step: 1,
+                        min: 0,
+                        max: tweets ? tweets.length : 0,
+                        type: 'number',
+                        'aria-labelledby': 'input-slider',
+                    }}
+                />
             </Grid>
-            <Grid container item spacing={2} alignItems="center">
-                <ButtonGroup>
-                    <Button disabled={loading !== 0} onClick={handleDecrement10}>-10</Button>
-                    <Button disabled={loading !== 0} onClick={handleDecrement}>-1</Button>
-                    <Button disabled={loading !== 0} onClick={handleIncrement}>+1</Button>
-                    <Button disabled={loading !== 0} onClick={handleIncrement10}>+10</Button>
-                </ButtonGroup>
-            </Grid>
-            <Grid container item spacing={2} alignContent="center">
-                {tweets && <Tweet tweet={tweets[count]} />}
+            <Grid item xs={10}>
+                <Slider
+                    value={typeof count === 'number' ? count : 0}
+                    onChange={(_event, newValue) => {
+                        if (Array.isArray(newValue)) {
+                            newValue = newValue[0];
+                        }
+                        setCount(newValue);
+                    }}
+                    min={0}
+                    max={tweets ? tweets.length : 0}
+                    aria-labelledby="input-slider"
+                />
             </Grid>
         </Grid>
-    </div>
+        <Grid item xs={12}>
+            <ButtonGroup>
+                <Button disabled={loading !== 0} onClick={handleDecrement10}>-10</Button>
+                <Button disabled={loading !== 0} onClick={handleDecrement}>-1</Button>
+                <Button disabled={loading !== 0} onClick={handleIncrement}>+1</Button>
+                <Button disabled={loading !== 0} onClick={handleIncrement10}>+10</Button>
+            </ButtonGroup>
+        </Grid>
+        <Grid item xs={12}>
+            {tweets && <Tweet tweet={tweets[count]} />}
+        </Grid>
+    </Grid>
 }
 
 function App() {
@@ -152,7 +150,7 @@ function App() {
     }, [setSource]);
 
     const currentSource = sources.find(t => t.key === source);
-    return <div>
+    return <div style={{ overflow:"hidden" }}>
         <div>
             <FormControl>
                 <InputLabel id="year-select-label">Year</InputLabel>
