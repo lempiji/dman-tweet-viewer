@@ -71,13 +71,13 @@ interface ViewerProps {
 function Viewer({ url }: ViewerProps) {
     const [loading, setLoading] = React.useState(0);
     const [count, setCount] = React.useState(0);
-
-    const handleDecrement10 = React.useCallback(() => { setCount(v => v - 10); }, [setCount]);
-    const handleDecrement = React.useCallback(() => { setCount(v => v - 1); }, [setCount]);
-    const handleIncrement = React.useCallback(() => { setCount(v => v + 1); }, [setCount]);
-    const handleIncrement10 = React.useCallback(() => { setCount(v => v + 10); }, [setCount]);
-
     const [tweets, setTweets] = React.useState<string[]>(null);
+
+    const handleDecrement10 = React.useCallback(() => { setCount(v => Math.max(0, v - 10)); }, [setCount]);
+    const handleDecrement = React.useCallback(() => { setCount(v => Math.max(0, v - 1)); }, [setCount]);
+    const handleIncrement = React.useCallback(() => { setCount(v => Math.min(v + 1, tweets.length - 1)); }, [setCount, tweets]);
+    const handleIncrement10 = React.useCallback(() => { setCount(v => Math.min(v + 10, tweets.length - 1)); }, [setCount, tweets]);
+
     React.useEffect(() => {
         const abort = new AbortController();
         let loaded = false;
