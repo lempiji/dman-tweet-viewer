@@ -125,13 +125,13 @@ function Viewer({ url }: ViewerProps) {
     React.useEffect(()=>{
         if (autoPlay) {
             const timer = setTimeout(() => {
-                setCount(c => c + 1);
+                setCount(c => Math.min(c + 1, tweets.length - 1));
             }, AUTOPLAY_INTERVAL);
             return () => {
                 clearTimeout(timer);
             };
         }
-    }, [autoPlay, tweetLoaded]);
+    }, [autoPlay, tweetLoaded, tweets]);
 
     return <Grid container spacing={2} >
         <Grid container item xs={12} spacing={2}>
@@ -155,7 +155,7 @@ function Viewer({ url }: ViewerProps) {
                         'aria-labelledby': 'input-slider',
                     }}
                 />
-                {tweets && `/${tweets.length}`}
+                {tweets && `/${tweets.length - 1}`}
             </Grid>
             <Grid item xs>
                 <Slider
