@@ -11,6 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
+
 interface Twttr {
     widgets: {
         createTweet(id: string, container: HTMLElement, options: { width: number }): Promise<HTMLElement>;
@@ -20,9 +23,10 @@ declare const twttr: Twttr;
 
 interface TweetProps {
     tweet: string;
+    onLoad?: () => void,
 }
 
-function Tweet({ tweet }: TweetProps) {
+function Tweet({ tweet, onLoad }: TweetProps) {
     const containerRef = React.useRef<HTMLDivElement>();
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -34,6 +38,9 @@ function Tweet({ tweet }: TweetProps) {
         t.then(() => { 
             setLoading(false);
             setError(!containerRef.current.firstChild);
+            if (onLoad) {
+                onLoad();
+            }
         });
         return () => {
             t.then(e => {
@@ -63,20 +70,32 @@ const sources: DataSource[] = [
 ];
 
 const INITIAL_YEAR = sources[0].key;
+const AUTOPLAY_INTERVAL = 2000;
 
 interface ViewerProps {
     url: string;
+}
+
+function useSignal(): [boolean, () => void] {
+    const [signalCount, setSignalCount] = React.useState(false);
+    const notify = React.useCallback(() => { setSignalCount(current => !current); }, [setSignalCount]);
+    return [signalCount, notify];
 }
 
 function Viewer({ url }: ViewerProps) {
     const [loading, setLoading] = React.useState(0);
     const [count, setCount] = React.useState(0);
     const [tweets, setTweets] = React.useState<string[]>(null);
+    const [autoPlay, setAutoPlay] = React.useState(false);
+    const [tweetLoaded, notify] = useSignal();
 
     const handleDecrement10 = React.useCallback(() => { setCount(v => Math.max(0, v - 10)); }, [setCount]);
     const handleDecrement = React.useCallback(() => { setCount(v => Math.max(0, v - 1)); }, [setCount]);
     const handleIncrement = React.useCallback(() => { setCount(v => Math.min(v + 1, tweets.length - 1)); }, [setCount, tweets]);
     const handleIncrement10 = React.useCallback(() => { setCount(v => Math.min(v + 10, tweets.length - 1)); }, [setCount, tweets]);
+
+    const handleTweetLoaded = React.useCallback(() => { notify(); }, [notify]);
+    const handleTogglePlay = React.useCallback(() => { setAutoPlay(current => !current)}, [setAutoPlay]);
 
     React.useEffect(() => {
         const abort = new AbortController();
@@ -102,6 +121,17 @@ function Viewer({ url }: ViewerProps) {
                 setLoading(c => c - 1);
         };
     }, [url]);
+
+    React.useEffect(()=>{
+        if (autoPlay) {
+            const timer = setTimeout(() => {
+                setCount(c => c + 1);
+            }, AUTOPLAY_INTERVAL);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [autoPlay, tweetLoaded]);
 
     return <Grid container spacing={2} >
         <Grid container item xs={12} spacing={2}>
@@ -149,9 +179,14 @@ function Viewer({ url }: ViewerProps) {
                 <Button disabled={loading !== 0} onClick={handleIncrement}>+1</Button>
                 <Button disabled={loading !== 0} onClick={handleIncrement10}>+10</Button>
             </ButtonGroup>
+            <Button disabled={loading !== 0} onClick={handleTogglePlay} variant="outlined" color="primary">
+                {
+                    autoPlay ? (<StopIcon></StopIcon>) : (<PlayArrowIcon></PlayArrowIcon>)
+                }
+            </Button>
         </Grid>
         <Grid item xs={12}>
-            {tweets && <Tweet tweet={tweets[count]} />}
+            {tweets && <Tweet tweet={tweets[count]} onLoad={handleTweetLoaded} />}
         </Grid>
     </Grid>
 }
