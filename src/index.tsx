@@ -24,9 +24,17 @@ interface TweetProps {
 
 function Tweet({ tweet }: TweetProps) {
     const containerRef = React.useRef<HTMLDivElement>();
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(false);
 
     React.useEffect(() => {
         const t = twttr.widgets.createTweet(tweet, containerRef.current, { width: Math.min(window.innerWidth - 20, 500) });
+        setLoading(true);
+        setError(false);
+        t.then(() => { 
+            setLoading(false);
+            setError(!containerRef.current.firstChild);
+        });
         return () => {
             t.then(e => {
                 if (e && e.parentNode) {
@@ -34,9 +42,13 @@ function Tweet({ tweet }: TweetProps) {
                 }
             });
         };
-    }, [tweet]);
+    }, [tweet, containerRef]);
 
-    return <div ref={containerRef}></div>
+    return <>
+        <div key="container" ref={containerRef}></div>
+        {loading && (<div>Loading...</div>)}
+        {error && (<div>Not Found</div>)}
+    </>;
 }
 
 interface DataSource {
@@ -113,6 +125,7 @@ function Viewer({ url }: ViewerProps) {
                         'aria-labelledby': 'input-slider',
                     }}
                 />
+                {tweets && `/${tweets.length}`}
             </Grid>
             <Grid item xs>
                 <Slider
