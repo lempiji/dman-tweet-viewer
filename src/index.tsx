@@ -64,6 +64,7 @@ interface DataSource {
     url: string;
 }
 const sources: DataSource[] = [
+    { key: 2020, name: "2020", url: "https://gist.githubusercontent.com/simdnyan/7ece810139961663819aa3c64448874c/raw/ac6d5ce3a0b2ea2a96f4f6dc2a7d6ec86ae5f4da/20191201-20201130" },
     { key: 2019, name: "2019", url: "https://gist.githubusercontent.com/simdnyan/a82a49ed5a2d4e559b393f20746a6587/raw/0d02b2d846e2af1748baf4ccd739859310efd2d1/20181201-20191130" },
     { key: 2018, name: "2018", url: "https://gist.githubusercontent.com/simdnyan/1f9f19c523100ceeadc8f67b017b7ddb/raw/45f69b54ac0201b3c028e7ccc7325c04fc384e45/20171201-20181130" },
     { key: 2017, name: "2017", url: "https://gist.githubusercontent.com/simdnyan/02fbf4106ad9bd39cf02eb418ced5fa5/raw/4b5cfe9712d0c1ea5a2f81ffd71ffe9d14deb6bd/20161201-20171130" },
@@ -145,7 +146,8 @@ function Viewer({ url }: ViewerProps) {
                     }}
                     onBlur={(event) => {
                         const current = parseInt(event.target.value);
-                        setCount(Math.min(Math.max(0, current), tweets.length - 1));
+                        const max = tweets ? tweets.length - 1 : 0;
+                        setCount(Math.min(Math.max(0, current), max));
                     }}
                     inputProps={{
                         step: 1,
