@@ -52832,6 +52832,10 @@ function Tweet(_a) {
 }
 
 var sources = [{
+  key: 2020,
+  name: "2020",
+  url: "https://gist.githubusercontent.com/simdnyan/7ece810139961663819aa3c64448874c/raw/ac6d5ce3a0b2ea2a96f4f6dc2a7d6ec86ae5f4da/20191201-20201130"
+}, {
   key: 2019,
   name: "2019",
   url: "https://gist.githubusercontent.com/simdnyan/a82a49ed5a2d4e559b393f20746a6587/raw/0d02b2d846e2af1748baf4ccd739859310efd2d1/20181201-20191130"
@@ -52969,7 +52973,8 @@ function Viewer(_a) {
     },
     onBlur: function onBlur(event) {
       var current = parseInt(event.target.value);
-      setCount(Math.min(Math.max(0, current), tweets.length - 1));
+      var max = tweets ? tweets.length - 1 : 0;
+      setCount(Math.min(Math.max(0, current), max));
     },
     inputProps: {
       step: 1,
@@ -53086,7 +53091,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51619" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58572" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
