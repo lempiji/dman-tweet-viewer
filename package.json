@@ -4,16 +4,16 @@
   "description": "",
   "source": "index.html",
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-    "@types/react": "^16.14.21",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@types/react": "^16.14.34",
     "emotion": "^10.0.27",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "typescript": "^3.9.10"
   },
   "devDependencies": {
-    "gh-pages": "^1.2.0",
+    "gh-pages": "^4.0.0",
     "parcel": "^2.0.1"
   },
   "scripts": {
