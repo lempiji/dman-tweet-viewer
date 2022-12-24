@@ -64,6 +64,7 @@ interface DataSource {
     url: string;
 }
 const sources: DataSource[] = [
+    { key: 2022, name: "2022", url: "https://gist.githubusercontent.com/simdnyan/2696812b5d4aa4aa4009a3f31fa9dfb7/raw/3e931e8ae85c283f8acb776167bdc68a1f2ae512/20211201-20221130" },
     { key: 2021, name: "2021", url: "https://gist.githubusercontent.com/simdnyan/fc703dbd3a3805ce537a77cbc7269c06/raw/fca790ba683f6e3003dc4aa78af0291e639f8e97/20201201-20211130" },
     { key: 2020, name: "2020", url: "https://gist.githubusercontent.com/simdnyan/7ece810139961663819aa3c64448874c/raw/ac6d5ce3a0b2ea2a96f4f6dc2a7d6ec86ae5f4da/20191201-20201130" },
     { key: 2019, name: "2019", url: "https://gist.githubusercontent.com/simdnyan/a82a49ed5a2d4e559b393f20746a6587/raw/0d02b2d846e2af1748baf4ccd739859310efd2d1/20181201-20191130" },
