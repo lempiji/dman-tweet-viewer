@@ -1,6 +1,7 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
 
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -11,8 +12,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 
+import IconButton from "@material-ui/core/IconButton";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 interface Twttr {
     widgets: {
@@ -203,7 +206,7 @@ function App() {
 
     const currentSource = sources.find(t => t.key === source);
     return <div style={{ overflow: "hidden" }}>
-        <div>
+        <Box display="flex" alignItems="center">
             <FormControl>
                 <InputLabel id="year-select-label">Year</InputLabel>
                 <Select labelId="year-select-label" title="Year" onChange={onChange} value={currentSource.key}>
@@ -212,7 +215,13 @@ function App() {
                     }
                 </Select>
             </FormControl>
-        </div>
+            <IconButton
+                href="https://github.com/lempiji/dman-tweet-viewer"
+                target="_blank"
+              >
+                <GitHubIcon />
+              </IconButton>
+        </Box>
         <Viewer url={currentSource.url} />
     </div>;
 }
